@@ -1,0 +1,9 @@
+.search-bar-container{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.search-input {
+  width: 95%;
+}
