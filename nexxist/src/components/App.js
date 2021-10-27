@@ -9,6 +9,7 @@ export default function App() {
   const mockData = [
     {
       id: 1,
+      picture: "../images/2056434.jpeg",
       price: 679800,
       status: 'Active',
       beds: 3,
@@ -22,6 +23,7 @@ export default function App() {
     },
     {
       id: 2,
+      picture: "../images/unnamed.jpeg",
       price: 783000,
       status: 'Pending',
       beds: 3,
