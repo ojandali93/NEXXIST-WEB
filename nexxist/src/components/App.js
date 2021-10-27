@@ -5,7 +5,6 @@ import '../css/app.css';
 
 export default function App() {
   const [address, setAddress] = useState('')
-
   return (
     <div>
       <div>

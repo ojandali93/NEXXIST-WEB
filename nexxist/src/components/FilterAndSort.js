@@ -10,9 +10,9 @@ export default function FilterAndSort() {
       </div>
       <div>
         <label>
-          Sort
+          Sort:
         </label>
-        <select>
+        <select className="sort-options">
           <option value="price-high-low">Price(High to Low)</option>
           <option value="price-low-high">Price(Low to High)</option>
           <option value="newest">Newest</option>
