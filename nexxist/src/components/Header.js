@@ -3,7 +3,7 @@ import logo from '../images/nexxist.png'
 import like from '../images/like.png'
 import user from '../images/user.png'
 
-export default function Header(props) {
+export default function Header() {
   return (
     <>
       <div className="header-container container-section">

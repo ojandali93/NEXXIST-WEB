@@ -1,6 +1,7 @@
 @import-normalize;
 @import './header.css';
 @import './search-bar.css';
+@import './filter-and-sort.css';
 
 *, *::before, *::after {
   font-family: Gotham Rounded, sans-serif;

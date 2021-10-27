@@ -1,0 +1,7 @@
+.filter-and-sort-container {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
