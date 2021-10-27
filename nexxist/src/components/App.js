@@ -15,11 +15,16 @@ export default function App() {
       beds: 3,
       baths: 3,
       sqft: 1364,
+      living_space: 4364,
       address: '184 Valley View Ter, Mission Viejo, CA 92692',
       days_listed: 114,
       mls: 'OC22353432',
       agent: 'John Doe',
-      broker: 'JD Realty'
+      broker: 'JD Realty',
+      hoa: 283,
+      property_tax: 125,
+      home_insurance: 197,
+      rent: 1954,
     },
     {
       id: 2,
@@ -29,11 +34,16 @@ export default function App() {
       beds: 3,
       baths: 3,
       sqft: 1939,
+      living_space: 3964,
       address: 'Plan 2 Plan, Neo at Mission Foothils',
       days_listed: 29,
       mls: 'OC3628342',
       agent: 'John Doe',
-      broker: 'JD Realty'
+      broker: 'JD Realty',
+      hoa: 313,
+      property_tax: 208,
+      home_insurance: 241,
+      rent: 2150,
     }
   ]
 

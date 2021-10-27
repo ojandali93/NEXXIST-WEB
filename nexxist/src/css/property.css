@@ -2,8 +2,21 @@
   width: 96%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 28px;
 }
 
 .property-image {
   width: 100%;
+}
+
+.property-details-section {
+  padding-bottom: 8px;
+  border-bottom: 2px solid grey;
+}
+
+.detail-container-flex {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
