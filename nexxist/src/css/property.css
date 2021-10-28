@@ -55,3 +55,12 @@
   display: flex;
   justify-content: center;
 }
+
+.monthly-expense-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.monthly-expense-value-conatiner {
+  display: flex;
+}
