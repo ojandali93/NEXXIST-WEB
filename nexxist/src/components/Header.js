@@ -1,16 +1,14 @@
 import React from 'react'
-import logo from '../images/nexxist.png'
-import like from '../images/like.png'
-import user from '../images/user.png'
+
 
 export default function Header() {
   return (
     <>
       <div className="header-container container-section">
-        <img className="logo" alt="Nexxist Logo" src={logo}/>
+        <img className="logo" alt="Nexxist Logo"/>
         <div>
-          <img className="header-image" alt="Like " src={like}/>
-          <img className="header-image" alt="User " src={user}/>
+          <img className="header-image" alt="Like "/>
+          <img className="header-image" alt="User "/>
         </div>
       </div>
     </>

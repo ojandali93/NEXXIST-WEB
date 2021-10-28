@@ -15,7 +15,7 @@ export default function PropertyERClosed(props) {
     <>
       <div className="e-and-r-container">
         <p>Revenue &#38; Expenses:</p>
-        <button onClick={() => {handlePropertyRevenueExpensesEdit()}}>EDIT</button>
+        <button onClick={() => {handlePropertyRevenueExpensesEdit(property.id)}}>EDIT</button>
       </div>
       <div className="e-and-r-container">
         <p>Monthly Expenses: {totalMonthlyPayment}</p>

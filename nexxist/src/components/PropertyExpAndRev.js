@@ -10,11 +10,12 @@ export default function PropertyExpAndRev(props) {
 
   const { propertyRevenueExpensesSelected } = useContext(PropertyContext)
   const { handlePropertyRevenueExpensesEdit } = useContext(PropertyContext)
+  const { selectedPropertyId } = useContext(PropertyContext)
 
   return (
     <div className="property-expenses-and-revenue-container">
       {
-        propertyRevenueExpensesSelected ? <PropertyEREdit property={property}/> : <PropertyERClosed property={property}/>
+        propertyRevenueExpensesSelected && property.id == selectedPropertyId ? <PropertyEREdit property={property}/> : <PropertyERClosed property={property}/>
       }
     </div>
   )

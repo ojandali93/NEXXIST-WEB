@@ -13,7 +13,7 @@ export default function PropertyList() {
         properties.map(property => {
           return (
             <div key={property.id} className="property-container">
-              <PropertyImage image={property.picture}/>
+              <PropertyImage image={property.imgSrc}/>
               <PropertyDetail property={property}/>
               <PropertyExpAndRev property={property}/>
               <PropertyMetricsSummary property={property}/>

@@ -1,11 +1,49 @@
 import React, { useState } from 'react';
 import HeaderSection from './HeaderSection.js';
 import PropertyList from './PropertyList.js';
+import axios from 'axios'
 import '../css/app.css';
 
 export const PropertyContext = React.createContext()
 
 export default function App() {
+  // let propertyList
+  // let optionsProperties = {
+  //   method: 'GET',
+  //   url: 'https://zillow-com1.p.rapidapi.com/propertyExtendedSearch',
+  //   params: {location: 'santa monica, ca', home_type: 'Houses'},
+  //   headers: {
+  //     'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
+  //     'x-rapidapi-key': 'd215d48d9cmsh70fd20aaaf82139p17c47cjsnaab25fce9232'
+  //   }
+  // };
+
+  // axios.request(optionsProperties).then(function (response) {
+  //   propertyList = response.data.props
+  //   let newProperty = {}
+  //   for(let i = 0; i < 2; i++){
+  //     newProperty['bathrooms'] = propertyList[i].bathrooms
+  //     newProperty['propertyType'] = propertyList[i].propertyType
+  //     newProperty['lotAreaValue'] = propertyList[i].lotAreaValue
+  //     newProperty['address'] = propertyList[i].address
+  //     newProperty['imgSrc'] = propertyList[i].imgSrc
+  //     newProperty['price'] = propertyList[i].price
+  //     newProperty['listingDateTime'] = propertyList[i].listingDateTime
+  //     newProperty['listingStatus'] = propertyList[i].listingStatus
+  //     newProperty['zpid'] = propertyList[i].zpid
+  //     newProperty['daysOnZillow'] = propertyList[i].daysOnZillow
+  //     newProperty['bedrooms'] = propertyList[i].bedrooms
+  //     newProperty['country'] = propertyList[i].country
+  //     newProperty['currency'] = propertyList[i].currency
+  //     newProperty['livingArea'] = propertyList[i].livingArea
+  //     newProperty['hasImage'] = propertyList[i].hasImage
+  //     console.log(`new property ${newProperty.address}`)
+  //   }
+  //   setProperties([...properties, newProperty])
+  // }).catch(function (error) {
+  //   console.error(error);
+  // });
+
   const mockData = [
     {
       id: 1,
@@ -49,6 +87,8 @@ export default function App() {
 
   const [address, setAddress] = useState('')
   const [properties, setProperties] = useState(mockData)
+  const [selectedPropertyId, setSelectedPropertyById] = useState()
+  const [selectedEditingPropertyLoan, setSelectedEditingPropertyLoan] = useState(false)
   const [propertyRevenueExpensesSelected, setPropertyRevenueExpensesSelected] = useState(false)
 
   function calculateLoanAmount(price){
@@ -104,7 +144,8 @@ export default function App() {
     return returnOnInvestment
   }
 
-  function handlePropertyRevenueExpensesEdit(){
+  function handlePropertyRevenueExpensesEdit(id){
+    handleSelectPropertyById(id)
     setPropertyRevenueExpensesSelected(true)
   }
 
@@ -112,17 +153,36 @@ export default function App() {
     setPropertyRevenueExpensesSelected(false)
   }
 
+  function handleSelectPropertyById(id){
+    setSelectedPropertyById(id)
+  }
+
+  function handleSelectPropertyLoan(){
+    setSelectedEditingPropertyLoan(true)
+  }
+
+  function handleSelectPropertyCash(){
+    setSelectedEditingPropertyLoan(false)
+  }
+
   const propertyContextValue = {
     properties,
+    selectedPropertyId,
+    selectedEditingPropertyLoan,
     propertyRevenueExpensesSelected,
     setProperties,
+    calculateLoanAmount,
+    calculateDownPayment,
+    calculateClosingCost,
     calculateMonthlyMortgage,
     calculateMontlyExpenses,
     calculateCashFlow,
     calculateNetOperatingIncome,
     calculateReturnOnInvestment,
     handlePropertyRevenueExpensesEdit,
-    handlePropertyRevenueExpensesCollapse
+    handlePropertyRevenueExpensesCollapse,
+    handleSelectPropertyLoan,
+    handleSelectPropertyCash
   }
 
   return (
