@@ -34,3 +34,23 @@
   align-items: center;
   margin-bottom: 4px;
 }
+
+.key-metrics-container {
+  margin-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid grey;
+}
+
+.key-metrics-section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.more-metrics-button {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}

@@ -50,9 +50,67 @@ export default function App() {
   const [address, setAddress] = useState('')
   const [properties, setProperties] = useState(mockData)
 
+  function calculateLoanAmount(price){
+    return parseInt(price * .8)
+  }
+
+  function calculateDownPayment(price){
+    return parseInt(price * .2)
+  }
+
+  function calculateClosingCost(price){
+    let closingCost = calculateLoanAmount(price) * .03
+    return parseInt(closingCost)
+  }
+
+  function calculateMonthlyMortgage(price){
+    let loanAmount = parseInt(price) * .8
+    let interestRate = .0315 / 12
+    let powerRate = Math.pow(1 + interestRate, 360)
+    let monthlyPayment = parseInt(loanAmount) * (interestRate * powerRate) / (powerRate - 1)
+    return monthlyPayment
+  }
+
+  function calculateMontlyExpenses(property){
+    let monthlyPayment = calculateMonthlyMortgage(property.price)
+    return parseInt(property.hoa) + parseInt(property.property_tax) + parseInt(property.home_insurance) + parseInt(monthlyPayment)
+  }
+
+  function calculateCashFlow(property){
+    let cashFlow = parseInt(property.rent) - calculateMonthlyMortgage(property.price)
+    return cashFlow
+  }
+
+  function calculateOperatingExpenseRatio(property){
+    let rent = parseInt(property.rent) * 12
+    let revenue = 0
+    let vaccancyRate = .94
+    let grossOperatingIncome = (rent * vaccancyRate) + revenue
+    return grossOperatingIncome
+  }
+
+  function calculateNetOperatingIncome(property){
+    let goi = calculateOperatingExpenseRatio(property)
+    let monthlyExpenses = parseInt(property.hoa) + parseInt(property.property_tax) + parseInt(property.home_insurance)
+    let netOperatingIncome = goi - (monthlyExpenses * 12)
+    return netOperatingIncome
+  }
+
+  function calculateReturnOnInvestment(property){
+    let initialInvestment = calculateDownPayment(property.price) + (calculateLoanAmount(property.price) * .03)
+    let annualRevenue = (property.rent * 12) - (calculateMontlyExpenses(property) * 12)
+    let returnOnInvestment = (annualRevenue / initialInvestment) * 100
+    return returnOnInvestment
+  }
+
   const propertyContextValue = {
     properties,
-    setProperties
+    setProperties,
+    calculateMonthlyMortgage,
+    calculateMontlyExpenses,
+    calculateCashFlow,
+    calculateNetOperatingIncome,
+    calculateReturnOnInvestment
   }
 
   return (

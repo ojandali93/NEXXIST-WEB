@@ -1,24 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { PropertyContext } from './App.js'
 
 export default function PropertyExpAndRev(props) {
   const {
     property
   } = props;
 
-  function calculateMonthlyMortgage(){
-    let loanAmount = parseInt(property.price) * .8
-    let interestRate = .0315 / 12
-    let powerRate = Math.pow(1 + interestRate, 360)
-    let monthlyPayment = parseInt(loanAmount) * (interestRate * powerRate) / (powerRate - 1)
-    return monthlyPayment
-  }
+  const { calculateMontlyExpenses } = useContext(PropertyContext)
 
-  function calculateMontlyExpenses(){
-    let monthlyPayment = calculateMonthlyMortgage()
-    return parseInt(property.hoa) + parseInt(property.property_tax) + parseInt(property.home_insurance) + parseInt(monthlyPayment)
-  }
-
-  let totalMonthlyPayment = calculateMontlyExpenses()
+  let totalMonthlyPayment = calculateMontlyExpenses(property)
 
   return (
     <div className="property-expenses-and-revenue-container">
