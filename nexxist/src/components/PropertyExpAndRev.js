@@ -1,4 +1,6 @@
 import React, { useContext } from 'react'
+import PropertyERClosed from './PropertyERClosed.js'
+import PropertyEREdit from './PropertyEREdit.js'
 import { PropertyContext } from './App.js'
 
 export default function PropertyExpAndRev(props) {
@@ -6,23 +8,14 @@ export default function PropertyExpAndRev(props) {
     property
   } = props;
 
-  const { calculateMontlyExpenses } = useContext(PropertyContext)
-
-  let totalMonthlyPayment = calculateMontlyExpenses(property)
+  const { propertyRevenueExpensesSelected } = useContext(PropertyContext)
+  const { handlePropertyRevenueExpensesEdit } = useContext(PropertyContext)
 
   return (
     <div className="property-expenses-and-revenue-container">
-      <div className="e-and-r-container">
-        <p>Revenue &#38; Expenses:</p>
-        <button>EDIT</button>
-      </div>
-      <div className="e-and-r-container">
-        <p>Monthly Expenses: {totalMonthlyPayment}</p>
-        <p>Monthly Revenue: {property.rent}</p>
-      </div>
-      <div>
-        <p>** Monthly Expenses based on 20% down payment 30 year fixed mortage @ 3.15% interest rate **</p>
-      </div>
+      {
+        propertyRevenueExpensesSelected ? <PropertyEREdit property={property}/> : <PropertyERClosed property={property}/>
+      }
     </div>
   )
 }

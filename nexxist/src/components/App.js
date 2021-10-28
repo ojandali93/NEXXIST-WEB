@@ -49,6 +49,7 @@ export default function App() {
 
   const [address, setAddress] = useState('')
   const [properties, setProperties] = useState(mockData)
+  const [propertyRevenueExpensesSelected, setPropertyRevenueExpensesSelected] = useState(false)
 
   function calculateLoanAmount(price){
     return parseInt(price * .8)
@@ -97,20 +98,31 @@ export default function App() {
   }
 
   function calculateReturnOnInvestment(property){
-    let initialInvestment = calculateDownPayment(property.price) + (calculateLoanAmount(property.price) * .03)
+    let initialInvestment = calculateDownPayment(property.price) + (calculateClosingCost(property.price)) + (calculateLoanAmount(property.price) * .03)
     let annualRevenue = (property.rent * 12) - (calculateMontlyExpenses(property) * 12)
     let returnOnInvestment = (annualRevenue / initialInvestment) * 100
     return returnOnInvestment
   }
 
+  function handlePropertyRevenueExpensesEdit(){
+    setPropertyRevenueExpensesSelected(true)
+  }
+
+  function handlePropertyRevenueExpensesCollapse(){
+    setPropertyRevenueExpensesSelected(false)
+  }
+
   const propertyContextValue = {
     properties,
+    propertyRevenueExpensesSelected,
     setProperties,
     calculateMonthlyMortgage,
     calculateMontlyExpenses,
     calculateCashFlow,
     calculateNetOperatingIncome,
-    calculateReturnOnInvestment
+    calculateReturnOnInvestment,
+    handlePropertyRevenueExpensesEdit,
+    handlePropertyRevenueExpensesCollapse
   }
 
   return (
