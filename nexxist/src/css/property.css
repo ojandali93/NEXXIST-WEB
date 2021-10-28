@@ -28,7 +28,7 @@
   border-bottom: 2px solid grey;
 }
 
-.e-and-r-container {
+.expenses-container {
   width: 100%;
   display: flex;
   justify-content: space-between;

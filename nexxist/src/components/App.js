@@ -7,16 +7,6 @@ import '../css/app.css';
 export const PropertyContext = React.createContext()
 
 export default function App() {
-  // let propertyList
-  // let optionsProperties = {
-  //   method: 'GET',
-  //   url: 'https://zillow-com1.p.rapidapi.com/propertyExtendedSearch',
-  //   params: {location: 'santa monica, ca', home_type: 'Houses'},
-  //   headers: {
-  //     'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
-  //     'x-rapidapi-key': 'd215d48d9cmsh70fd20aaaf82139p17c47cjsnaab25fce9232'
-  //   }
-  // };
 
   // axios.request(optionsProperties).then(function (response) {
   //   propertyList = response.data.props

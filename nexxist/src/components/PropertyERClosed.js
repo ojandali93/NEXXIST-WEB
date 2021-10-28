@@ -13,16 +13,18 @@ export default function PropertyERClosed(props) {
 
   return (
     <>
-      <div className="e-and-r-container">
-        <p>Revenue &#38; Expenses:</p>
+      <div className="expenses-container">
+        <p>Monthly Costs</p>
         <button onClick={() => {handlePropertyRevenueExpensesEdit(property.id)}}>EDIT</button>
       </div>
-      <div className="e-and-r-container">
-        <p>Monthly Expenses: {totalMonthlyPayment}</p>
-        <p>Monthly Revenue: {property.rent}</p>
+      <div>
+        <p>Principle &amp; Interest:</p>
+        <div>
+          
+        </div>
       </div>
       <div>
-        <p>** Monthly Expenses based on 20% down payment 30 year fixed mortage @ 3.15% interest rate **</p>
+        <p>** Loan based on 20% down payment 30 year fixed mortage @ 3.15% interest rate **</p>
       </div>
     </>
   )
