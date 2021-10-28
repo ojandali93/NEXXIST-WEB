@@ -1,14 +1,18 @@
 import React, { useContext } from 'react'
 import { PropertyContext } from './App.js'
+import EditingMortgageInfo from './EditingMortgageInfo.js'
 
-export default function PropertyERClosed(props) {
+export default function PropertyMonthlyExpenses(props) {
   const {
     property
   } = props;
 
+  const { selectedPropertyId } = useContext(PropertyContext)
   const { calculateMontlyExpenses } = useContext(PropertyContext)
   const { calculateMonthlyMortgage } = useContext(PropertyContext)
-  const { handlePropertyRevenueExpensesEdit } = useContext(PropertyContext)
+  const { currentlyEditingMortgagePayments } = useContext(PropertyContext)
+  const { handleEditingMortagePaymentOpen } = useContext(PropertyContext)
+  const { handleEditingMortagePaymentClose } = useContext(PropertyContext)
 
   let totalMonthlyPayment = calculateMontlyExpenses(property)
   let monthlyMortgage = calculateMonthlyMortgage(property.price)
@@ -23,9 +27,14 @@ export default function PropertyERClosed(props) {
         <p>Principle &amp; Interest:</p>
         <div className="monthly-expense-value-conatiner">
           <p>${monthlyMortgage.toFixed(2)}</p>
-          <button>Edit</button>
+          {
+            currentlyEditingMortgagePayments && selectedPropertyId ? <button onClick={() => {handleEditingMortagePaymentClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingMortagePaymentOpen(property.id)}}>Edit</button>
+          }
         </div>
       </div>
+      {
+        currentlyEditingMortgagePayments && selectedPropertyId ? <EditingMortgageInfo property={property}/> : null
+      }
       <div className="monthly-expense-container">
         <p>Mortgage Insurance:</p>
         <div className="monthly-expense-value-conatiner">
