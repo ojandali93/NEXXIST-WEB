@@ -52,6 +52,10 @@ export default function App() {
   const [properties, setProperties] = useState(mockData)
   const [selectedPropertyId, setSelectedPropertyById] = useState()
   const [currentlyEditingMortgagePayments, setCurrentlyEditingMortgagePayments] = useState(false)
+  const [currentlyEditingPropertyTax, setCurrentlyEditingPropertyTax] = useState(false)
+  const [currentlyEditingHomeInsurance, setCurrentlyEditingHomeInsurance] = useState(false)
+  const [currentlyEditingHOA, setCurrentlyEditingHOA] = useState(false)
+  const [currentlyEditingAdditionalExpenses, setCurrentlyEditingAdditionalExpenses] = useState(false)
 
   function calculateLoanAmount(price){
     return parseInt(price * .8)
@@ -120,10 +124,54 @@ export default function App() {
     setSelectedPropertyById('')
   }
 
+  function handleEditingPropertyTaxOpen(id){
+    setCurrentlyEditingPropertyTax(true)
+    setSelectedPropertyById(id)
+  }
+
+  function handleEditingPropertyTaxClose(id){
+    setCurrentlyEditingPropertyTax(false)
+    setSelectedPropertyById('')
+  }
+
+  function handleEditingHomeInsuranceOpen(id){
+    setCurrentlyEditingHomeInsurance(true)
+    setSelectedPropertyById(id)
+  }
+
+  function handleEditingHomeInsuranceClose(id){
+    setCurrentlyEditingHomeInsurance(false)
+    setSelectedPropertyById('')
+  }
+
+  function handleEditingHOAOpen(id){
+    setCurrentlyEditingHOA(true)
+    setSelectedPropertyById(id)
+  }
+
+  function handleEditingHOAClose(id){
+    setCurrentlyEditingHOA(false)
+    setSelectedPropertyById('')
+  }
+
+  function handleEditingAdditionalExpensesOpen(id){
+    setCurrentlyEditingAdditionalExpenses(true)
+    setSelectedPropertyById(id)
+  }
+
+  function handleEditingAdditionalExpensesClose(id){
+    setCurrentlyEditingAdditionalExpenses(false)
+    setSelectedPropertyById('')
+  }
+
   const propertyContextValue = {
     properties,
     selectedPropertyId,
     currentlyEditingMortgagePayments,
+    currentlyEditingPropertyTax,
+    currentlyEditingHomeInsurance,
+    currentlyEditingHOA,
+    currentlyEditingAdditionalExpenses,
     setProperties,
     calculateLoanAmount,
     calculateDownPayment,
@@ -135,7 +183,15 @@ export default function App() {
     calculateReturnOnInvestment,
     handleSelectPropertyById,
     handleEditingMortagePaymentOpen,
-    handleEditingMortagePaymentClose
+    handleEditingMortagePaymentClose,
+    handleEditingPropertyTaxOpen,
+    handleEditingPropertyTaxClose,
+    handleEditingHomeInsuranceOpen,
+    handleEditingHomeInsuranceClose,
+    handleEditingHOAOpen,
+    handleEditingHOAClose,
+    handleEditingAdditionalExpensesOpen,
+    handleEditingAdditionalExpensesClose
   }
 
   return (
