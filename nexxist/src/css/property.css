@@ -20,3 +20,17 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.property-expenses-and-revenue-container {
+  margin-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid grey;
+}
+
+.e-and-r-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
