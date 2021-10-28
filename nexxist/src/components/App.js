@@ -56,6 +56,7 @@ export default function App() {
   const [currentlyEditingHomeInsurance, setCurrentlyEditingHomeInsurance] = useState(false)
   const [currentlyEditingHOA, setCurrentlyEditingHOA] = useState(false)
   const [currentlyEditingAdditionalExpenses, setCurrentlyEditingAdditionalExpenses] = useState(false)
+  const [currentlyEditingRentRevenue, setCurrentlyEditingRentRevenue] = useState(false)
 
   function calculateLoanAmount(price){
     return parseInt(price * .8)
@@ -164,6 +165,16 @@ export default function App() {
     setSelectedPropertyById('')
   }
 
+  function handleEditingRentRevenueOpen(id){
+    setCurrentlyEditingRentRevenue(true)
+    setSelectedPropertyById(id)
+  }
+
+  function handleEditingRentRevenueClose(id){
+    setCurrentlyEditingRentRevenue(false)
+    setSelectedPropertyById('')
+  }
+
   const propertyContextValue = {
     properties,
     selectedPropertyId,
@@ -172,6 +183,7 @@ export default function App() {
     currentlyEditingHomeInsurance,
     currentlyEditingHOA,
     currentlyEditingAdditionalExpenses,
+    currentlyEditingRentRevenue,
     setProperties,
     calculateLoanAmount,
     calculateDownPayment,
@@ -191,7 +203,9 @@ export default function App() {
     handleEditingHOAOpen,
     handleEditingHOAClose,
     handleEditingAdditionalExpensesOpen,
-    handleEditingAdditionalExpensesClose
+    handleEditingAdditionalExpensesClose,
+    handleEditingRentRevenueOpen,
+    handleEditingRentRevenueClose
   }
 
   return (
