@@ -45,6 +45,25 @@ export default function App() {
       property_tax: 489,
       home_insurance: 298,
       rent: 3249,
+    },
+    {
+      id: 3,
+      picture: "../images/unnamed.jpeg",
+      price: 464000,
+      status: 'Active',
+      beds: 3,
+      baths: 3,
+      sqft: 1939,
+      living_space: 3964,
+      address: 'Plan 2 Plan, Neo at Mission Foothils',
+      days_listed: 29,
+      mls: 'OC3628342',
+      agent: 'John Doe',
+      broker: 'JD Realty',
+      hoa: 12,
+      property_tax: 68,
+      home_insurance: 239,
+      rent: 2200,
     }
   ]
 
@@ -57,6 +76,7 @@ export default function App() {
   const [currentlyEditingHOA, setCurrentlyEditingHOA] = useState(false)
   const [currentlyEditingAdditionalExpenses, setCurrentlyEditingAdditionalExpenses] = useState(false)
   const [currentlyEditingRentRevenue, setCurrentlyEditingRentRevenue] = useState(false)
+  const [expandedMetrics, setExpandedMetrics] = useState(false)
 
   function calculateLoanAmount(price){
     return parseInt(price * .8)
@@ -85,11 +105,19 @@ export default function App() {
   }
 
   function calculateCashFlow(property){
-    let cashFlow = parseInt(property.rent) - calculateMonthlyMortgage(property.price)
+    let cashFlow = parseInt(property.rent) - calculateMontlyExpenses(property)
     return cashFlow
   }
 
-  function calculateOperatingExpenseRatio(property){
+  function calculateCashOnCashFlow(property){
+    let cashReceived = property.rent
+    let cashInvested = calculateDownPayment(property.price)
+    let cashOnCashReturn = (cashReceived * 12) / cashInvested
+    let finalCashOnCashFlow = cashOnCashReturn * 100
+    return finalCashOnCashFlow
+  }
+
+  function calculateGrossOperatingIncome(property){
     let rent = parseInt(property.rent) * 12
     let revenue = 0
     let vaccancyRate = .94
@@ -97,19 +125,50 @@ export default function App() {
     return grossOperatingIncome
   }
 
+  function calculateOperatingExpenseRatio(property){
+    let goi = calculateGrossOperatingIncome(property)
+    let monthlyExpenses = calculateMontlyExpenses(property)
+    let operatingExpenseRatio = ((monthlyExpenses * 12) / goi) * 100
+    return operatingExpenseRatio
+  }
+
   function calculateNetOperatingIncome(property){
-    let goi = calculateOperatingExpenseRatio(property)
+    let goi = calculateGrossOperatingIncome(property)
     let monthlyExpenses = parseInt(property.hoa) + parseInt(property.property_tax) + parseInt(property.home_insurance)
     let netOperatingIncome = goi - (monthlyExpenses * 12)
     return netOperatingIncome
   }
 
   function calculateReturnOnInvestment(property){
-    let initialInvestment = calculateDownPayment(property.price) + (calculateClosingCost(property.price)) + (calculateLoanAmount(property.price) * .03)
+    let initialInvestment = calculateDownPayment(property.price) + (calculateClosingCost(property.price))
     let annualRevenue = (property.rent * 12) - (calculateMontlyExpenses(property) * 12)
     let returnOnInvestment = (annualRevenue / initialInvestment) * 100
     return returnOnInvestment
   }
+
+  function calculateRentCostRatio(property){
+    let annualRent = property.rent* 12
+    let price = property.price
+    let rentPriceRatio = (annualRent / price) * 100
+    return rentPriceRatio
+  }
+
+  function calculateGrossRentMultiplier(property){
+    let annualRent = property.rent* 12
+    let price = property.price
+    let grossRentMultiplier = (price / annualRent)
+    return grossRentMultiplier
+  }
+
+  function calculateVaccancyRate(property){
+    let vacancyRateDays = Math.round(.08 * 365)
+    let rent = property.rent * 12
+    let vaccancyRate = .94 
+    let annualRate = (rent * vaccancyRate) / vacancyRateDays
+    return annualRate
+  }
+
+  // the following are event handlers
 
   function handleSelectPropertyById(id){
     setSelectedPropertyById(id)
@@ -175,6 +234,16 @@ export default function App() {
     setSelectedPropertyById('')
   }
 
+  function handleMetricsOpen(id){
+    setExpandedMetrics(true)
+    setSelectedPropertyById(id)
+  }
+
+  function handleMetricsClose(id){
+    setExpandedMetrics(false)
+    setSelectedPropertyById('')
+  }
+
   const propertyContextValue = {
     properties,
     selectedPropertyId,
@@ -184,6 +253,7 @@ export default function App() {
     currentlyEditingHOA,
     currentlyEditingAdditionalExpenses,
     currentlyEditingRentRevenue,
+    expandedMetrics,
     setProperties,
     calculateLoanAmount,
     calculateDownPayment,
@@ -193,6 +263,12 @@ export default function App() {
     calculateCashFlow,
     calculateNetOperatingIncome,
     calculateReturnOnInvestment,
+    calculateCashOnCashFlow,
+    calculateGrossOperatingIncome,
+    calculateOperatingExpenseRatio,
+    calculateRentCostRatio,
+    calculateGrossRentMultiplier,
+    calculateVaccancyRate,
     handleSelectPropertyById,
     handleEditingMortagePaymentOpen,
     handleEditingMortagePaymentClose,
@@ -205,7 +281,9 @@ export default function App() {
     handleEditingAdditionalExpensesOpen,
     handleEditingAdditionalExpensesClose,
     handleEditingRentRevenueOpen,
-    handleEditingRentRevenueClose
+    handleEditingRentRevenueClose,
+    handleMetricsOpen,
+    handleMetricsClose
   }
 
   return (
