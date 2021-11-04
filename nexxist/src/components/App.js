@@ -1,7 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderSection from './HeaderSection.js';
 import PropertyList from './PropertyList.js';
 import '../css/app.css';
+
+const axios = require("axios").default;
+
+let options = {
+  method: 'GET',
+  url: 'https://zillow-com1.p.rapidapi.com/propertyExtendedSearch',
+  params: {location: 'santa monica, ca', home_type: 'Houses'},
+  headers: {
+    'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
+    'x-rapidapi-key': 'd215d48d9cmsh70fd20aaaf82139p17c47cjsnaab25fce9232'
+  }
+};
+
+let propertyOptions = {
+    method: 'GET',
+    url: 'https://zillow-com1.p.rapidapi.com/property',
+    headers: {
+      'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
+      'x-rapidapi-key': 'd215d48d9cmsh70fd20aaaf82139p17c47cjsnaab25fce9232'
+    }
+  };
 
 export const PropertyContext = React.createContext()
 
@@ -26,6 +47,7 @@ export default function App() {
       property_tax: 0,
       home_insurance: 181,
       rent: 3200,
+      zpid: '2222223234'
     },
     {
       id: 2,
@@ -45,6 +67,7 @@ export default function App() {
       property_tax: 489,
       home_insurance: 298,
       rent: 3249,
+      zpid: '2222223234'
     },
     {
       id: 3,
@@ -64,10 +87,13 @@ export default function App() {
       property_tax: 68,
       home_insurance: 239,
       rent: 2200,
+      zpid: '2222223234'
     }
   ]
 
   const [address, setAddress] = useState('')
+  const [currentProperty, setCurrentProperty] = useState({})
+  const [propertyList, setPropertyList] = useState([])
   const [properties, setProperties] = useState(mockData)
   const [selectedPropertyId, setSelectedPropertyById] = useState()
   const [currentlyEditingMortgagePayments, setCurrentlyEditingMortgagePayments] = useState(false)
@@ -77,6 +103,67 @@ export default function App() {
   const [currentlyEditingAdditionalExpenses, setCurrentlyEditingAdditionalExpenses] = useState(false)
   const [currentlyEditingRentRevenue, setCurrentlyEditingRentRevenue] = useState(false)
   const [expandedMetrics, setExpandedMetrics] = useState(false)
+
+  function requestInitialListings(){
+    axios.request(options).then(function (response) {
+      let resultList = response.data.props
+      console.log(resultList)
+      let listOfProperties = []
+      for(let i = 0; i < 10; i++){
+        let currentProperty = resultList[i]
+        let createdProperty = {
+          'address': currentProperty['address'],
+          'bathrooms': currentProperty['bathrooms'],
+          'bedrooms': currentProperty['bedrooms'],
+          'country': currentProperty['country'],
+          'currency': currentProperty['currency'],
+          'daysOnZillow': currentProperty['daysOnZillow'],
+          'hasImage': currentProperty['hasImage'],
+          'imgSrc': currentProperty['imgSrc'],
+          'listingStatus': currentProperty['listingStatus'],
+          'livingArea': currentProperty['livingArea'],
+          'lotAreaUnit': currentProperty['lotAreaUnit'],
+          'lotAreaValue': currentProperty['lotAreaValue'],
+          'price': currentProperty['price'],
+          'propertyType': currentProperty['propertyType'],
+          'zpid': currentProperty['zpid'],
+          'brokerageName': null,
+          // the following will default to null
+          'propertyTaxRate': null,
+          'zestimate': null,
+          'rentZestimate': null,
+          'associationFee': null,
+          'hasHomeWarranty': null,
+          'depositsAndFees': null,
+          'hasAssociation': null,
+          'hoaFee': null,
+          'mortgageRates': {
+            'armRate': null,
+            'fifteenYearFixedRate': null,
+            'thirtyYearFixedRate': null,
+          },
+          'mlsid': null,
+          'listingAgent': null,
+        }
+        listOfProperties.push(createdProperty)
+      }
+      console.log(`created properties: ${listOfProperties[0]['address']}`)
+      console.log(`created properties: ${listOfProperties[1]['address']}`)
+      console.log(`created properties: ${listOfProperties[2]['address']}`)
+      setPropertyList(prev => [...prev, listOfProperties])
+    }).catch(function (error) {
+      console.error(error);
+    });
+  }
+
+  useEffect(() => {
+    requestInitialListings()
+  }, [])
+
+  useEffect(() => {
+    console.log('property list has changed')
+    console.log(propertyList)
+  }, [propertyList])
 
   function calculateLoanAmount(price){
     return parseInt(price * .8)
@@ -174,9 +261,17 @@ export default function App() {
     setSelectedPropertyById(id)
   }
 
-  function handleEditingMortagePaymentOpen(id){
-    setCurrentlyEditingMortgagePayments(true)
-    setSelectedPropertyById(id)
+  function handleEditingMortagePaymentOpen(property){
+    console.log(property)
+    // setCurrentlyEditingMortgagePayments(true)
+    // setSelectedPropertyById(id)
+    // for(let i = 0; i < properties.length; i++){
+    //   if(properties[i]['id'] === id){
+    //     console.log(properties[i])
+    //     setCurrentProperty(properties[i])
+    //     console.log(currentProperty)
+    //   }
+    // }
   }
 
   function handleEditingMortagePaymentClose(id){
@@ -244,8 +339,14 @@ export default function App() {
     setSelectedPropertyById('')
   }
 
+  function handleHomePriceChange(e){
+    console.log(e)
+  }
+
   const propertyContextValue = {
     properties,
+    propertyList,
+    currentProperty,
     selectedPropertyId,
     currentlyEditingMortgagePayments,
     currentlyEditingPropertyTax,
@@ -255,6 +356,7 @@ export default function App() {
     currentlyEditingRentRevenue,
     expandedMetrics,
     setProperties,
+    setPropertyList,
     calculateLoanAmount,
     calculateDownPayment,
     calculateClosingCost,
@@ -283,7 +385,8 @@ export default function App() {
     handleEditingRentRevenueOpen,
     handleEditingRentRevenueClose,
     handleMetricsOpen,
-    handleMetricsClose
+    handleMetricsClose,
+    handleHomePriceChange
   }
 
   return (

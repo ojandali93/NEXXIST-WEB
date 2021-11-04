@@ -6,24 +6,18 @@ export default function EditingMortgageInfo(props) {
     property
   } = props;
 
-  const { calculateMontlyExpenses } = useContext(PropertyContext)
-  const { calculateMonthlyMortgage } = useContext(PropertyContext)
-  const { handleEditingMortagePaymentOpen } = useContext(PropertyContext)
-  const { handleEditingMortagePaymentClose } = useContext(PropertyContext)
-
-  let totalMonthlyPayment = calculateMontlyExpenses(property)
-  let monthlyMortgage = calculateMonthlyMortgage(property.price)
+  const { handleHomePriceChange } = useContext(PropertyContext)
 
   return (
     <>
       <div>
         <label>Home Price:</label>
-        <input type="integer"/>
+        <input onInput={(e) => handleHomePriceChange(e.target.value)} type="number" min="0" defaultValue={property.price}/>
       </div>
       <div>
         <label>Down Payment:</label>
-        <input type="integer"/>
-        <input max="100" type="integer"/>
+        <input type="number"/>
+        <input max="100" type="number" min="0" step="5"/>
       </div>
       <div>
         <label>Loan Program:</label>
@@ -34,7 +28,7 @@ export default function EditingMortgageInfo(props) {
       </div>
       <div>
         <label>Interest Rate:</label>
-        <input type="integer"/>
+        <input min="0" type="number" step=".2"/>
       </div>
     </>
   )

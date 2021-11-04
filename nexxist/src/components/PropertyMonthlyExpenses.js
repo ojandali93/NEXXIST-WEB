@@ -45,7 +45,8 @@ export default function PropertyMonthlyExpenses(props) {
         <div className="monthly-expense-value-conatiner">
           <p>${monthlyMortgage.toFixed(2)}</p>
           {
-            currentlyEditingMortgagePayments && selectedPropertyId ? <button onClick={() => {handleEditingMortagePaymentClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingMortagePaymentOpen(property.id)}}>Edit</button>
+            
+            currentlyEditingMortgagePayments && selectedPropertyId ? <button onClick={() => {handleEditingMortagePaymentClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingMortagePaymentOpen(property)}}>Edit</button>
           }
         </div>
       </div>

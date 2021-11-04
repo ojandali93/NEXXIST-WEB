@@ -7,11 +7,11 @@ import PropertyRevenue from './PropertyRevenue.js'
 import PropertyMetricsSummary from './PropertyMetricsSummary.js'
 
 export default function PropertyList() {
-  const { properties, setProperties } = useContext(PropertyContext)
+  const { propertyList } = useContext(PropertyContext)
   return (
     <div>
       {
-        properties.map(property => {
+        propertyList.map(property => {
           return (
             <div key={property.id} className="property-container">
               <PropertyImage image={property.imgSrc}/>
