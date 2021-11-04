@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function PropertyDetails({ property }) {
+  let lotArea = parseInt(property.lotAreaValue)
   return (
     <div className="property-details-section">
       <div className="detail-container-flex">
@@ -11,7 +12,11 @@ export default function PropertyDetails({ property }) {
         <p>Beds: {property.bedrooms}</p>
         <p>Baths: {property.bathrooms}</p>
         <p>Living Size: {property.livingArea} sqft.</p>
-        <p>Lot Size: {property.lotAreaValue} sqft.</p>
+        <p>Lot Size: 
+          {
+            property.lotAreaUnit == 'acres' ? " " + lotArea.toFixed(2) + " acres" : " " + lotArea + " sqft."
+          }
+        </p>
       </div>
       <p>{property.address}</p>
       <div className="detail-container-flex">

@@ -46,12 +46,12 @@ export default function PropertyMonthlyExpenses(props) {
           <p>${monthlyMortgage.toFixed(2)}</p>
           {
             
-            currentlyEditingMortgagePayments && selectedPropertyId ? <button onClick={() => {handleEditingMortagePaymentClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingMortagePaymentOpen(property)}}>Edit</button>
+            currentlyEditingMortgagePayments && selectedPropertyId ? <button onClick={() => {handleEditingMortagePaymentClose()}}>Done</button> : <button onClick={() => {handleEditingMortagePaymentOpen(property)}}>Edit</button>
           }
         </div>
       </div>
       {
-        currentlyEditingMortgagePayments && selectedPropertyId === property.id ? <EditingMortgageInfo property={property}/> : null
+        currentlyEditingMortgagePayments && selectedPropertyId === property.zpid ? <EditingMortgageInfo property={property}/> : null
       }
       <div className="monthly-expense-container">
         <p>Mortgage Insurance:</p>
@@ -65,48 +65,48 @@ export default function PropertyMonthlyExpenses(props) {
         <div className="monthly-expense-value-conatiner">
           <p>${property.property_tax}</p>
           {
-            currentlyEditingPropertyTax && selectedPropertyId ? <button onClick={() => {handleEditingPropertyTaxClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingPropertyTaxOpen(property.id)}}>Edit</button>
+            currentlyEditingPropertyTax && selectedPropertyId ? <button onClick={() => {handleEditingPropertyTaxClose()}}>Done</button> : <button onClick={() => {handleEditingPropertyTaxOpen(property)}}>Edit</button>
           }
         </div>
       </div>
       {
-        currentlyEditingPropertyTax && selectedPropertyId === property.id ? <EditingPropertyTax property={property}/> : null
+        currentlyEditingPropertyTax && selectedPropertyId === property.zpid ? <EditingPropertyTax property={property}/> : null
       }
       <div className="monthly-expense-container">
         <p>Home Insurance:</p>
         <div className="monthly-expense-value-conatiner">
           <p>${property.home_insurance}</p>
           {
-            currentlyEditingHomeInsurance && selectedPropertyId ? <button onClick={() => {handleEditingHomeInsuranceClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingHomeInsuranceOpen(property.id)}}>Edit</button>
+            currentlyEditingHomeInsurance && selectedPropertyId ? <button onClick={() => {handleEditingHomeInsuranceClose()}}>Done</button> : <button onClick={() => {handleEditingHomeInsuranceOpen(property)}}>Edit</button>
           }
         </div>
       </div>
       {
-        currentlyEditingHomeInsurance && selectedPropertyId === property.id ? <EditingHomeInsurance property={property}/> : null
+        currentlyEditingHomeInsurance && selectedPropertyId === property.zpid ? <EditingHomeInsurance property={property}/> : null
       }
       <div className="monthly-expense-container">
         <p>HOA Fees:</p>
         <div className="monthly-expense-value-conatiner">
           <p>${property.hoa}</p>
           {
-            currentlyEditingHOA && selectedPropertyId ? <button onClick={() => {handleEditingHOAClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingHOAOpen(property.id)}}>Edit</button>
+            currentlyEditingHOA && selectedPropertyId ? <button onClick={() => {handleEditingHOAClose()}}>Done</button> : <button onClick={() => {handleEditingHOAOpen(property)}}>Edit</button>
           }
         </div>
       </div>
       {
-        currentlyEditingHOA && selectedPropertyId === property.id ? <EditingHOA property={property}/> : null
+        currentlyEditingHOA && selectedPropertyId === property.zpid ? <EditingHOA property={property}/> : null
       }
       <div className="monthly-expense-container">
         <p>Additional Expenses:</p>
         <div className="monthly-expense-value-conatiner">
           <p>${0}</p>
           {
-            currentlyEditingAdditionalExpenses && selectedPropertyId ? <button onClick={() => {handleEditingAdditionalExpensesClose(property.id)}}>Done</button> : <button onClick={() => {handleEditingAdditionalExpensesOpen(property.id)}}>Edit</button>
+            currentlyEditingAdditionalExpenses && selectedPropertyId ? <button onClick={() => {handleEditingAdditionalExpensesClose()}}>Done</button> : <button onClick={() => {handleEditingAdditionalExpensesOpen(property)}}>Edit</button>
           }
         </div>
       </div>
       {
-        currentlyEditingAdditionalExpenses && selectedPropertyId === property.id ? <EditingAdditionalExpenses property={property}/> : null
+        currentlyEditingAdditionalExpenses && selectedPropertyId === property.zpid ? <EditingAdditionalExpenses property={property}/> : null
       }
       <div>
         <p>** Loan based on 20% down payment 30 year fixed mortage @ 3.15% interest rate **</p>

@@ -11,7 +11,7 @@ let options = {
   params: {location: 'santa monica, ca', home_type: 'Houses'},
   headers: {
     'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
-    'x-rapidapi-key': 'd215d48d9cmsh70fd20aaaf82139p17c47cjsnaab25fce9232'
+    
   }
 };
 
@@ -20,7 +20,7 @@ let propertyOptions = {
     url: 'https://zillow-com1.p.rapidapi.com/property',
     headers: {
       'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
-      'x-rapidapi-key': 'd215d48d9cmsh70fd20aaaf82139p17c47cjsnaab25fce9232'
+      
     }
   };
 
@@ -28,73 +28,9 @@ export const PropertyContext = React.createContext()
 
 export default function App() {
 
-  const mockData = [
-    {
-      id: 1,
-      picture: "../images/2056434.jpeg",
-      price: 517887,
-      status: 'Active',
-      beds: 3,
-      baths: 3,
-      sqft: 1364,
-      living_space: 4364,
-      address: '184 Valley View Ter, Mission Viejo, CA 92692',
-      days_listed: 114,
-      mls: 'OC22353432',
-      agent: 'John Doe',
-      broker: 'JD Realty',
-      hoa: 659,
-      property_tax: 0,
-      home_insurance: 181,
-      rent: 3200,
-      zpid: '2222223234'
-    },
-    {
-      id: 2,
-      picture: "../images/unnamed.jpeg",
-      price: 850000,
-      status: 'Pending',
-      beds: 3,
-      baths: 3,
-      sqft: 1939,
-      living_space: 3964,
-      address: 'Plan 2 Plan, Neo at Mission Foothils',
-      days_listed: 29,
-      mls: 'OC3628342',
-      agent: 'John Doe',
-      broker: 'JD Realty',
-      hoa: 394,
-      property_tax: 489,
-      home_insurance: 298,
-      rent: 3249,
-      zpid: '2222223234'
-    },
-    {
-      id: 3,
-      picture: "../images/unnamed.jpeg",
-      price: 464000,
-      status: 'Active',
-      beds: 3,
-      baths: 3,
-      sqft: 1939,
-      living_space: 3964,
-      address: 'Plan 2 Plan, Neo at Mission Foothils',
-      days_listed: 29,
-      mls: 'OC3628342',
-      agent: 'John Doe',
-      broker: 'JD Realty',
-      hoa: 12,
-      property_tax: 68,
-      home_insurance: 239,
-      rent: 2200,
-      zpid: '2222223234'
-    }
-  ]
-
   const [address, setAddress] = useState('')
   const [currentProperty, setCurrentProperty] = useState({})
   const [propertyList, setPropertyList] = useState([])
-  const [properties, setProperties] = useState(mockData)
   const [selectedPropertyId, setSelectedPropertyById] = useState()
   const [currentlyEditingMortgagePayments, setCurrentlyEditingMortgagePayments] = useState(false)
   const [currentlyEditingPropertyTax, setCurrentlyEditingPropertyTax] = useState(false)
@@ -127,30 +63,29 @@ export default function App() {
           'price': currentProperty['price'],
           'propertyType': currentProperty['propertyType'],
           'zpid': currentProperty['zpid'],
-          'brokerageName': null,
+          'brokerageName': 'JD realty',
           // the following will default to null
-          'propertyTaxRate': null,
-          'zestimate': null,
-          'rentZestimate': null,
-          'associationFee': null,
-          'hasHomeWarranty': null,
-          'depositsAndFees': null,
-          'hasAssociation': null,
-          'hoaFee': null,
+          'propertyTaxRate': 0,
+          'taxAnnualAmount': 10000,
+          'homeInsurance': 0,
+          'zestimate': 0,
+          'rentZestimate': 5000,
+          'associationFee': 49,
+          'hasHomeWarranty': false,
+          'depositsAndFees': 0,
+          'hasAssociation': false,
+          'hoaFee': 49,
           'mortgageRates': {
-            'armRate': null,
-            'fifteenYearFixedRate': null,
-            'thirtyYearFixedRate': null,
+            'armRate': 0,
+            'fifteenYearFixedRate': 0,
+            'thirtyYearFixedRate': 0,
           },
-          'mlsid': null,
-          'listingAgent': null,
+          'mlsid': '1111111111',
+          'listingAgent': 'John Doe',
         }
         listOfProperties.push(createdProperty)
       }
-      console.log(`created properties: ${listOfProperties[0]['address']}`)
-      console.log(`created properties: ${listOfProperties[1]['address']}`)
-      console.log(`created properties: ${listOfProperties[2]['address']}`)
-      setPropertyList(prev => [...prev, listOfProperties])
+      setPropertyList(listOfProperties)
     }).catch(function (error) {
       console.error(error);
     });
@@ -161,9 +96,24 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    console.log('property list has changed')
-    console.log(propertyList)
+    if(propertyList.length > 0){
+      console.log('all properties added:')
+      console.log(propertyList)
+      // completeBuildingProperties()
+    }
   }, [propertyList])
+
+  function completeBuildingProperties(){
+    for(let i = 0; i < propertyList.length; i++){
+      console.log(propertyList[i]['zpid'])
+      propertyOptions['params'] = {zpid: propertyList[i]['zpid']}
+      axios.request(propertyOptions).then(function (response) {
+        console.log(response.data);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    }
+  }
 
   function calculateLoanAmount(price){
     return parseInt(price * .8)
@@ -188,7 +138,8 @@ export default function App() {
 
   function calculateMontlyExpenses(property){
     let monthlyPayment = calculateMonthlyMortgage(property.price)
-    return parseInt(property.hoa) + parseInt(property.property_tax) + parseInt(property.home_insurance) + parseInt(monthlyPayment)
+    let totalMonthly = parseInt(property.hoaFee) + parseInt(property.taxAnnualAmount) + parseInt(property.homeInsurance) + parseInt(monthlyPayment)
+    return totalMonthly
   }
 
   function calculateCashFlow(property){
@@ -257,84 +208,76 @@ export default function App() {
 
   // the following are event handlers
 
-  function handleSelectPropertyById(id){
-    setSelectedPropertyById(id)
+  function handleSelectPropertyById(zpid){
+    setSelectedPropertyById(zpid)
   }
 
   function handleEditingMortagePaymentOpen(property){
-    console.log(property)
-    // setCurrentlyEditingMortgagePayments(true)
-    // setSelectedPropertyById(id)
-    // for(let i = 0; i < properties.length; i++){
-    //   if(properties[i]['id'] === id){
-    //     console.log(properties[i])
-    //     setCurrentProperty(properties[i])
-    //     console.log(currentProperty)
-    //   }
-    // }
+    setCurrentlyEditingMortgagePayments(true)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleEditingMortagePaymentClose(id){
+  function handleEditingMortagePaymentClose(){
     setCurrentlyEditingMortgagePayments(false)
     setSelectedPropertyById('')
   }
 
-  function handleEditingPropertyTaxOpen(id){
+  function handleEditingPropertyTaxOpen(property){
     setCurrentlyEditingPropertyTax(true)
-    setSelectedPropertyById(id)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleEditingPropertyTaxClose(id){
+  function handleEditingPropertyTaxClose(){
     setCurrentlyEditingPropertyTax(false)
     setSelectedPropertyById('')
   }
 
-  function handleEditingHomeInsuranceOpen(id){
+  function handleEditingHomeInsuranceOpen(property){
     setCurrentlyEditingHomeInsurance(true)
-    setSelectedPropertyById(id)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleEditingHomeInsuranceClose(id){
+  function handleEditingHomeInsuranceClose(){
     setCurrentlyEditingHomeInsurance(false)
     setSelectedPropertyById('')
   }
 
-  function handleEditingHOAOpen(id){
+  function handleEditingHOAOpen(property){
     setCurrentlyEditingHOA(true)
-    setSelectedPropertyById(id)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleEditingHOAClose(id){
+  function handleEditingHOAClose(){
     setCurrentlyEditingHOA(false)
     setSelectedPropertyById('')
   }
 
-  function handleEditingAdditionalExpensesOpen(id){
+  function handleEditingAdditionalExpensesOpen(property){
     setCurrentlyEditingAdditionalExpenses(true)
-    setSelectedPropertyById(id)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleEditingAdditionalExpensesClose(id){
+  function handleEditingAdditionalExpensesClose(){
     setCurrentlyEditingAdditionalExpenses(false)
     setSelectedPropertyById('')
   }
 
-  function handleEditingRentRevenueOpen(id){
+  function handleEditingRentRevenueOpen(property){
     setCurrentlyEditingRentRevenue(true)
-    setSelectedPropertyById(id)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleEditingRentRevenueClose(id){
+  function handleEditingRentRevenueClose(){
     setCurrentlyEditingRentRevenue(false)
     setSelectedPropertyById('')
   }
 
-  function handleMetricsOpen(id){
+  function handleMetricsOpen(property){
     setExpandedMetrics(true)
-    setSelectedPropertyById(id)
+    setSelectedPropertyById(property.zpid)
   }
 
-  function handleMetricsClose(id){
+  function handleMetricsClose(){
     setExpandedMetrics(false)
     setSelectedPropertyById('')
   }
@@ -344,7 +287,6 @@ export default function App() {
   }
 
   const propertyContextValue = {
-    properties,
     propertyList,
     currentProperty,
     selectedPropertyId,
@@ -355,7 +297,6 @@ export default function App() {
     currentlyEditingAdditionalExpenses,
     currentlyEditingRentRevenue,
     expandedMetrics,
-    setProperties,
     setPropertyList,
     calculateLoanAmount,
     calculateDownPayment,

@@ -12,13 +12,14 @@ export default function PropertyList() {
     <div>
       {
         propertyList.map(property => {
+          let keyId = property['zpid']
           return (
-            <div key={property.id} className="property-container">
+            <div key={keyId} className="property-container">
               <PropertyImage image={property.imgSrc}/>
               <PropertyDetail property={property}/>
               <PropertyExpAndRev property={property}/>
-              <PropertyRevenue property={property}/>
-              <PropertyMetricsSummary property={property}/>
+              {/* <PropertyRevenue property={property}/>
+              <PropertyMetricsSummary property={property}/> */}
             </div>
           )
         })
