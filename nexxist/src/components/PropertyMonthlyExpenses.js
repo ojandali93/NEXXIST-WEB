@@ -32,7 +32,8 @@ export default function PropertyMonthlyExpenses(props) {
   const { handleEditingAdditionalExpensesClose } = useContext(PropertyContext)
 
   let totalMonthlyPayment = calculateMontlyExpenses(property)
-  let monthlyMortgage = calculateMonthlyMortgage(property.price)
+  let monthlyMortgage = calculateMonthlyMortgage(property)
+  console.log(`monthlyMortgage: ${monthlyMortgage}`)
 
   return (
     <>
@@ -45,7 +46,6 @@ export default function PropertyMonthlyExpenses(props) {
         <div className="monthly-expense-value-conatiner">
           <p>${monthlyMortgage.toFixed(2)}</p>
           {
-            
             currentlyEditingMortgagePayments && selectedPropertyId ? <button onClick={() => {handleEditingMortagePaymentClose()}}>Done</button> : <button onClick={() => {handleEditingMortagePaymentOpen(property)}}>Edit</button>
           }
         </div>
@@ -63,7 +63,7 @@ export default function PropertyMonthlyExpenses(props) {
       <div className="monthly-expense-container">
         <p>Property Tax:</p>
         <div className="monthly-expense-value-conatiner">
-          <p>${property.property_tax}</p>
+          <p>${property.taxAnnualAmount}</p>
           {
             currentlyEditingPropertyTax && selectedPropertyId ? <button onClick={() => {handleEditingPropertyTaxClose()}}>Done</button> : <button onClick={() => {handleEditingPropertyTaxOpen(property)}}>Edit</button>
           }
@@ -75,7 +75,7 @@ export default function PropertyMonthlyExpenses(props) {
       <div className="monthly-expense-container">
         <p>Home Insurance:</p>
         <div className="monthly-expense-value-conatiner">
-          <p>${property.home_insurance}</p>
+          <p>${(property.annualHomeInsurance / 12).toFixed(2)}</p>
           {
             currentlyEditingHomeInsurance && selectedPropertyId ? <button onClick={() => {handleEditingHomeInsuranceClose()}}>Done</button> : <button onClick={() => {handleEditingHomeInsuranceOpen(property)}}>Edit</button>
           }
@@ -87,7 +87,7 @@ export default function PropertyMonthlyExpenses(props) {
       <div className="monthly-expense-container">
         <p>HOA Fees:</p>
         <div className="monthly-expense-value-conatiner">
-          <p>${property.hoa}</p>
+          <p>${property.hoaFee === null ? 0 : property.hoaFee}</p>
           {
             currentlyEditingHOA && selectedPropertyId ? <button onClick={() => {handleEditingHOAClose()}}>Done</button> : <button onClick={() => {handleEditingHOAOpen(property)}}>Edit</button>
           }

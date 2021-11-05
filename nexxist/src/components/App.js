@@ -11,7 +11,7 @@ let options = {
   params: {location: 'santa monica, ca', home_type: 'Houses'},
   headers: {
     'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
-    
+    'x-rapidapi-key': ''
   }
 };
 
@@ -20,7 +20,7 @@ let propertyOptions = {
     url: 'https://zillow-com1.p.rapidapi.com/property',
     headers: {
       'x-rapidapi-host': 'zillow-com1.p.rapidapi.com',
-      
+      'x-rapidapi-key': ''
     }
   };
 
@@ -43,9 +43,8 @@ export default function App() {
   function requestInitialListings(){
     axios.request(options).then(function (response) {
       let resultList = response.data.props
-      console.log(resultList)
       let listOfProperties = []
-      for(let i = 0; i < 10; i++){
+      for(let i = 0; i < 20; i++){
         let currentProperty = resultList[i]
         let createdProperty = {
           'address': currentProperty['address'],
@@ -53,7 +52,6 @@ export default function App() {
           'bedrooms': currentProperty['bedrooms'],
           'country': currentProperty['country'],
           'currency': currentProperty['currency'],
-          'daysOnZillow': currentProperty['daysOnZillow'],
           'hasImage': currentProperty['hasImage'],
           'imgSrc': currentProperty['imgSrc'],
           'listingStatus': currentProperty['listingStatus'],
@@ -63,29 +61,11 @@ export default function App() {
           'price': currentProperty['price'],
           'propertyType': currentProperty['propertyType'],
           'zpid': currentProperty['zpid'],
-          'brokerageName': 'JD realty',
-          // the following will default to null
-          'propertyTaxRate': 0,
-          'taxAnnualAmount': 10000,
-          'homeInsurance': 0,
-          'zestimate': 0,
-          'rentZestimate': 5000,
-          'associationFee': 49,
-          'hasHomeWarranty': false,
-          'depositsAndFees': 0,
-          'hasAssociation': false,
-          'hoaFee': 49,
-          'mortgageRates': {
-            'armRate': 0,
-            'fifteenYearFixedRate': 0,
-            'thirtyYearFixedRate': 0,
-          },
-          'mlsid': '1111111111',
-          'listingAgent': 'John Doe',
         }
         listOfProperties.push(createdProperty)
       }
-      setPropertyList(listOfProperties)
+      // setPropertyList(listOfProperties)
+      buildCompleteProperties(listOfProperties)
     }).catch(function (error) {
       console.error(error);
     });
@@ -96,23 +76,42 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if(propertyList.length > 0){
-      console.log('all properties added:')
-      console.log(propertyList)
-      // completeBuildingProperties()
-    }
   }, [propertyList])
 
-  function completeBuildingProperties(){
-    for(let i = 0; i < propertyList.length; i++){
-      console.log(propertyList[i]['zpid'])
-      propertyOptions['params'] = {zpid: propertyList[i]['zpid']}
+  function buildCompleteProperties(listOfProperties){
+    let i = 0;
+    function next() {
+      propertyOptions['params'] = {
+        zpid: listOfProperties[i]['zpid']
+      };
       axios.request(propertyOptions).then(function (response) {
-        console.log(response.data);
-      }).catch(function (error) {
-        console.error(error);
+        let results = response.data
+        listOfProperties[i]['brokerageName'] = results['brokerageName']
+        listOfProperties[i]['daysOnZillow'] = results['resoFacts']['daysOnZillow']
+        listOfProperties[i]['propertyTaxRate'] = results['propertyTaxRate']
+        listOfProperties[i]['zestimate'] = results['zestimate']
+        listOfProperties[i]['rentZestimate'] = results['rentZestimate']
+        listOfProperties[i]['associationFee'] = results['resoFacts']['associationFee']
+        listOfProperties[i]['hasAssociation'] = results['resoFacts']['hasAssociation']
+        listOfProperties[i]['hasHomeWarranty'] = results['resoFacts']['hasHomeWarranty']
+        listOfProperties[i]['depositsAndFees'] = results['resoFacts']['depositsAndFees']
+        listOfProperties[i]['hoaFee'] = results['resoFacts']['hoaFee']
+        listOfProperties[i]['armRate'] = results['mortgageRates']['arm5Rate']
+        listOfProperties[i]['fifteenYearFixedRate'] = results['mortgageRates']['fifteenYearFixedRate']
+        listOfProperties[i]['thirtyYearFixedRate'] = results['mortgageRates']['thirtyYearFixedRate']
+        listOfProperties[i]['mlsid'] = results['mlsid']
+        listOfProperties[i]['listingAgent'] = results['listed_by']['display_name']
+        listOfProperties[i]['taxAnnualAmount'] = (((listOfProperties[i]['propertyTaxRate'] / 100) * listOfProperties[i]['price'])/12).toFixed(2)
+        listOfProperties[i]['annualHomeInsurance'] = (parseInt(listOfProperties[i]['price']) * .0042).toFixed(2)
+        i++;
+        if (i < listOfProperties.length) {
+          next()
+        } else {
+          setPropertyList(listOfProperties)
+        }
       });
     }
+    next();
   }
 
   function calculateLoanAmount(price){
@@ -128,17 +127,23 @@ export default function App() {
     return parseInt(closingCost)
   }
 
-  function calculateMonthlyMortgage(price){
-    let loanAmount = parseInt(price) * .8
-    let interestRate = .0315 / 12
+  function calculateMonthlyMortgage(property){
+    console.log(property)
+    let loanAmount = parseInt(property.price) * .8
+    let interestRate = (property.thirtyYearFixedRate / 100) / 12
     let powerRate = Math.pow(1 + interestRate, 360)
     let monthlyPayment = parseInt(loanAmount) * (interestRate * powerRate) / (powerRate - 1)
     return monthlyPayment
   }
 
   function calculateMontlyExpenses(property){
-    let monthlyPayment = calculateMonthlyMortgage(property.price)
-    let totalMonthly = parseInt(property.hoaFee) + parseInt(property.taxAnnualAmount) + parseInt(property.homeInsurance) + parseInt(monthlyPayment)
+    let monthlyPayment = calculateMonthlyMortgage(property)
+    let hoaFee = property.hoaFee
+    let monthlyHomeInsurance = (property.annualHomeInsurance/12).toFixed(2)
+    if(hoaFee === null){
+      hoaFee = 0
+    }
+    let totalMonthly = parseInt(hoaFee) + parseInt(property.taxAnnualAmount) + parseInt(monthlyHomeInsurance) + parseInt(monthlyPayment.toFixed(2))
     return totalMonthly
   }
 
@@ -282,7 +287,23 @@ export default function App() {
     setSelectedPropertyById('')
   }
 
-  function handleHomePriceChange(e){
+  function handleLoanPriceChange(e){
+    console.log(e)
+  }
+
+  function handleDownPaymentPriceChange(e){
+    console.log(e)
+  }
+
+  function handleDownPaymentPercentChange(e){
+    console.log(e)
+  }
+
+  function handleLoanProgramChange(e){
+    console.log(e)
+  }
+
+  function handleInterestRateChange(e){
     console.log(e)
   }
 
@@ -327,7 +348,11 @@ export default function App() {
     handleEditingRentRevenueClose,
     handleMetricsOpen,
     handleMetricsClose,
-    handleHomePriceChange
+    handleLoanPriceChange,
+    handleDownPaymentPriceChange,
+    handleDownPaymentPercentChange,
+    handleLoanProgramChange,
+    handleInterestRateChange
   }
 
   return (

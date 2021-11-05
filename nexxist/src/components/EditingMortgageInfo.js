@@ -7,6 +7,11 @@ export default function EditingMortgageInfo(props) {
   } = props;
 
   const { handleHomePriceChange } = useContext(PropertyContext)
+  const { calculateDownPayment } = useContext(PropertyContext)
+  // const { handleHomePriceChange } = useContext(PropertyContext)
+  // const { handleHomePriceChange } = useContext(PropertyContext)
+  
+  let downPayment = calculateDownPayment(property.price)
 
   return (
     <>
@@ -16,8 +21,8 @@ export default function EditingMortgageInfo(props) {
       </div>
       <div>
         <label>Down Payment:</label>
-        <input type="number"/>
-        <input max="100" type="number" min="0" step="5"/>
+        <input type="number" defaultValue={downPayment}/>
+        <input max="100" type="number" min="0" step="5" defaultValue={20}/>
       </div>
       <div>
         <label>Loan Program:</label>
@@ -28,7 +33,7 @@ export default function EditingMortgageInfo(props) {
       </div>
       <div>
         <label>Interest Rate:</label>
-        <input min="0" type="number" step=".2"/>
+        <input min="0" type="number" step=".1" defaultValue={property.thirtyYearFixedRate}/>
       </div>
     </>
   )
